@@ -1,0 +1,28 @@
+.maincontainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+ 
+ /* .maincontainer form{
+   padding:5px;
+   width:450px;
+   max-height: 500vh;
+   background: rgb(201, 209, 209);
+   box-shadow: 0 5px 10px rgba(0,0,0,.1);
+   border-radius: 10%;
+ 
+  
+   } */
+   .text_area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  }
+ 
+ 

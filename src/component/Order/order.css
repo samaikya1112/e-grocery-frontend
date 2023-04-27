@@ -1,0 +1,42 @@
+.maincontainer{
+    box-sizing: border-box;
+    /* border: 2px solid rgb(0, 255, 187); */
+    border-radius: 10%;
+    padding: 25px;
+    padding-left: 27%;
+    padding-right: 25%;
+    padding-top: 3%;
+    /* background-color: #b5e1d1; */
+    text-align: center;
+    color: #282c34;
+  }
+  .maincontainer form{
+    align-items: center;
+    padding:20px;
+    width:540px;
+    margin-top: 20px;
+    margin-left: 3px;
+   /* background: rgb(206, 203, 203); */
+   background: rgb(201, 209, 209);
+    border-radius: 8px;
+   border-style: outset;
+   -moz-box-align: center;
+     box-shadow: 0 5px 10px rgba(0,0,0,.1);
+    }
+  .maincontainer table, th, td {
+   
+      border: 1px solid;
+      border-bottom: 1px solid #ddd;
+      table-layout: fixed;
+      margin-left: auto;
+      margin-right: auto;
+   
+  }
+  
+  .maincontainer th, td{
+    padding: 0%;
+  }
+  
+#placeorder{
+    max-width: 700px;
+}  
