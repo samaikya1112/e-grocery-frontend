@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import Nav from "../Nav";
 import "./all.css";
 import ProductCard from "./productcard";
-import ClearIcon from "@mui/icons-material/Clear";
 import {
   FormControl,
   Button,
@@ -16,35 +15,44 @@ import {
 import { Box } from "@mui/system";
 import AddIcon from "@mui/icons-material/Add";
 import { GET_ALL_PRODUCTS, GET_BY_PRODUCT } from "./service/product-service";
+
 function ViewAllProducts() {
   const [showForm, setShowForm] = useState(false);
-  const [prop, setProp] = useState([]);
+  const [products, setProducts] = useState([]);      // renamed
   const [searchTerm, setSearchTerm] = useState("");
-  function handleSearch(event) {
-    setSearchTerm(event.target.value);
-  }
+
+  const toArray = (data) => {
+    // Normalize API shapes => always return an array
+    if (Array.isArray(data)) return data;
+    if (Array.isArray(data?.content)) return data.content;     // common page shape
+    if (Array.isArray(data?.products)) return data.products;   // common field
+    if (Array.isArray(data?.data)) return data.data;           // some APIs
+    return []; // fallback
+  };
+
+  const handleSearch = (e) => setSearchTerm(e.target.value);
+
   const handleAddButton = () => {
     window.location.href = "/addproduct";
   };
-  const filteredProducts = prop.filter((product) =>
-    product.productName.toLowerCase().includes(searchTerm.toLowerCase())
+
+  const filteredProducts = (products || []).filter((p) =>
+    (p?.productName || "").toLowerCase().includes(searchTerm.toLowerCase())
   );
-  console.log("searchTerm:", searchTerm);
-  console.log("filteredProducts:", filteredProducts);
 
   const handleCancel = () => {
     window.location.href = "/viewproducts";
   };
 
   const handleViewProduct = (category) => {
-    console.log("category", category);
     axios
       .get(`${GET_BY_PRODUCT}${category}`)
       .then((res) => {
-        if (res.data == null) {
-          alert("no data");
+        const list = toArray(res.data);
+        if (list.length === 0) {
+          alert("No data");
         }
-        setProp(res.data);
+        setProducts(list);
         setShowForm(true);
       })
       .catch((err) => {
@@ -53,20 +61,17 @@ function ViewAllProducts() {
   };
 
   useEffect(() => {
-    try {
-      axios.get(GET_ALL_PRODUCTS).then((res) => {
-        setProp(res.data);
-      });
-    } catch (err) {
-      console.error(err);
-    }
+    axios
+      .get(GET_ALL_PRODUCTS)
+      .then((res) => setProducts(toArray(res.data)))
+      .catch((err) => console.error(err));
   }, []);
 
   return (
     <div>
       <Nav />
-      <br></br>
-      <br></br>
+      <br />
+      <br />
       <div className="m-auto">
         <br />
         <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -92,7 +97,7 @@ function ViewAllProducts() {
         </Box>
 
         <div className="parent-container">
-          <div class="sidebar">
+          <div className="sidebar">{/* <-- was class */} 
             <List style={{ color: "black" }}>
               <div>
                 <Card style={{ cursor: "pointer", margin: "10px" }}>
@@ -103,10 +108,7 @@ function ViewAllProducts() {
                     image="/images/all.jpg"
                     onClick={handleCancel}
                   />
-                  <Typography
-                    align="center"
-                    style={{ fontSize: "14px", marginBottom: "5px" }}
-                  >
+                  <Typography align="center" style={{ fontSize: "14px", marginBottom: "5px" }}>
                     All
                   </Typography>
                 </Card>
@@ -121,10 +123,7 @@ function ViewAllProducts() {
                     image="/images/vege.jpg"
                     onClick={() => handleViewProduct("VEGETABLES")}
                   />
-                  <Typography
-                    align="center"
-                    style={{ fontSize: "14px", marginBottom: "5px" }}
-                  >
+                  <Typography align="center" style={{ fontSize: "14px", marginBottom: "5px" }}>
                     vegetables
                   </Typography>
                 </Card>
@@ -139,10 +138,7 @@ function ViewAllProducts() {
                     image="/images/fruits.jpg"
                     onClick={() => handleViewProduct("FRUITS")}
                   />
-                  <Typography
-                    align="center"
-                    style={{ fontSize: "14px", marginBottom: "5px" }}
-                  >
+                  <Typography align="center" style={{ fontSize: "14px", marginBottom: "5px" }}>
                     Fruits
                   </Typography>
                 </Card>
@@ -157,14 +153,12 @@ function ViewAllProducts() {
                     image="/images/grains.jpg"
                     onClick={() => handleViewProduct("GRAINS")}
                   />
-                  <Typography
-                    align="center"
-                    style={{ fontSize: "14px", marginBottom: "5px" }}
-                  >
+                  <Typography align="center" style={{ fontSize: "14px", marginBottom: "5px" }}>
                     Grains
                   </Typography>
                 </Card>
               </div>
+
               <div>
                 <Card style={{ cursor: "pointer", margin: "10px" }}>
                   <CardMedia
@@ -174,14 +168,12 @@ function ViewAllProducts() {
                     image="/images/other.jpg"
                     onClick={() => handleViewProduct("OTHER")}
                   />
-                  <Typography
-                    align="center"
-                    style={{ fontSize: "14px", marginBottom: "5px" }}
-                  >
+                  <Typography align="center" style={{ fontSize: "14px", marginBottom: "5px" }}>
                     All Snacks
                   </Typography>
                 </Card>
               </div>
+
               <div>
                 <Card style={{ cursor: "pointer", margin: "10px" }}>
                   <CardMedia
@@ -191,14 +183,12 @@ function ViewAllProducts() {
                     image="/images/dairy.jpg"
                     onClick={() => handleViewProduct("DAIRY")}
                   />
-                  <Typography
-                    align="center"
-                    style={{ fontSize: "14px", marginBottom: "5px" }}
-                  >
+                  <Typography align="center" style={{ fontSize: "14px", marginBottom: "5px" }}>
                     Dairy
                   </Typography>
                 </Card>
               </div>
+
               <div>
                 <Card style={{ cursor: "pointer", margin: "10px" }}>
                   <CardMedia
@@ -208,14 +198,12 @@ function ViewAllProducts() {
                     image="/images/meat.jpg"
                     onClick={() => handleViewProduct("MEAT")}
                   />
-                  <Typography
-                    align="center"
-                    style={{ fontSize: "14px", marginBottom: "5px" }}
-                  >
+                  <Typography align="center" style={{ fontSize: "14px", marginBottom: "5px" }}>
                     Meat
                   </Typography>
                 </Card>
               </div>
+
               <div>
                 <Card style={{ cursor: "pointer", margin: "10px" }}>
                   <CardMedia
@@ -225,10 +213,7 @@ function ViewAllProducts() {
                     image="/images/sea.jpg"
                     onClick={() => handleViewProduct("SEAFOOD")}
                   />
-                  <Typography
-                    align="center"
-                    style={{ fontSize: "14px", marginBottom: "5px" }}
-                  >
+                  <Typography align="center" style={{ fontSize: "14px", marginBottom: "5px" }}>
                     SeaFood
                   </Typography>
                 </Card>
@@ -252,4 +237,5 @@ function ViewAllProducts() {
     </div>
   );
 }
+
 export default ViewAllProducts;
